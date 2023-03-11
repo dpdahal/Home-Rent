@@ -9,11 +9,13 @@ import blogSlice from "./reducers/blogSlice";
 import messageSlice from "./reducers/messageSlice";
 import aboutSlice from "./reducers/aboutSlice";
 import HouseSlice from "./reducers/houseSlice";
+import HouseGallerySlice from "./reducers/houseGallerySlice";
 
 
 const store = configureStore({
     reducer: {
         house: HouseSlice.reducer,
+        houseGallery: HouseGallerySlice.reducer,
         user: usersSlice.reducer,
         banner: bannerSlice.reducer,
         auth: authSlice.reducer,

@@ -8,9 +8,9 @@ import Swal from "sweetalert2";
 import {useDispatch} from "react-redux";
 
 
-function BookDetailsComponents() {
+function HouseDetailsComponents() {
     const params = useParams();
-    const [books, setBooks] = useState([]);
+    const [house, setHouse] = useState([]);
     const [review, setReview] = useState("");
     const [isReview, setIsReview] = useState(false);
     const navigate = useNavigate();
@@ -23,18 +23,19 @@ function BookDetailsComponents() {
 
     const ratingValues = (events) => {
         const ratValue = events.target.value;
-        let loginUserId = localStorage.getItem('userId');
-        if (loginUserId) {
-            const bookId = books._id;
-            const userId = localStorage.getItem('userId');
+        const houseId = house._id;
+        let user = localStorage.getItem("user");
+        user = JSON.parse(user);
+        let userId = user._id;
+        if (userId) {
             setIsReview(true);
             const data = {
-                bookId: bookId,
+                houseId: houseId,
                 userId: userId,
                 rating: ratValue
             }
-            api.post('/books/book-rating', data).then((response) => {
-                getBookById();
+            api.post('/house/house-rating', data).then((response) => {
+                getHouseById();
                 console.log(response.data);
             }).catch((error) => {
                 console.log(error);
@@ -48,19 +49,20 @@ function BookDetailsComponents() {
 
     const addRatingAndReview = (event) => {
         event.preventDefault();
-        const bookId = books._id;
-        const userId = localStorage.getItem('userId');
-        let loginUserId = localStorage.getItem('userId');
-        if (loginUserId) {
+        const houseId = house._id;
+        let user = localStorage.getItem("user");
+        user = JSON.parse(user);
+        let userId = user._id;
+        if (userId) {
             let data = {
-                bookId: bookId,
+                houseId: houseId,
                 userId: userId,
                 review: review
             }
-            api.post('/books/book-review', data).then((response) => {
+            api.post('/house/house-review', data).then((response) => {
                 console.log(response.data);
                 setReview("");
-                getBookById();
+                getHouseById();
             }).catch((error) => {
                 console.log(error);
             });
@@ -71,14 +73,14 @@ function BookDetailsComponents() {
     }
 
 
-    const getBookById = () => {
-        api.get(`/books/book-details/${params.id}`).then((response) => {
-            setBooks(response.data.books);
+    const getHouseById = () => {
+        api.get(`/house/show/${params.id}`).then((response) => {
+            setHouse(response.data.house);
         });
     }
 
     useEffect(() => {
-        getBookById()
+        getHouseById();
     }, []);
 
     const orderBookHandle = (bookId, ownerId) => {
@@ -117,15 +119,15 @@ function BookDetailsComponents() {
             <div className="container mb-5 mt-5">
                 <div className="row">
                     <div className="col-md-12">
-                        <h1 className="card-title-dp">Books Details</h1>
+                        <h1 className="card-title-dp">House Details</h1>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-md-4">
-                        <img src={books.image} className="img-fluid" alt=""/>
+                        <img src={house.image} className="img-fluid" alt=""/>
                         <hr/>
                         <div className="row">
-                            {books.gallery && books.gallery.map((item, index) => (
+                            {house.gallery && house.gallery.map((item, index) => (
                                 <div className="col-md-3" key={index}>
                                     <img src={item.image} width="100" height="40" alt=""/>
                                 </div>
@@ -135,14 +137,16 @@ function BookDetailsComponents() {
 
                     </div>
                     <div className="col-md-8">
-                        <h1 className="card-title-dp">{books.title}</h1>
-                        <p>{books.description}</p>
+                        <h1 className="card-title-dp">{house.title}</h1>
+
+                        <p>Price: {house.price}</p>
+                        <p> Rooms: {house.rooms}</p>
+                        <p> Location: {house.location}</p>
+                        <p> Owner: {house.ownerName}</p>
                         <br/>
-                        <p>Price: {books.price}</p>
-                        <p> Page: {books.pages}</p>
-                        <p> Owner: {books.postedBy}</p>
+                        <p>{house.description}</p>
                         <br/>
-                        <button onClick={() => orderBookHandle(books._id, books.ownerId)}
+                        <button onClick={() => orderBookHandle(house._id, house.ownerId)}
                                 className="btn btn-danger">Order Now
                         </button>
 
@@ -185,7 +189,7 @@ function BookDetailsComponents() {
                             <div className="col-md-12">
                                 <h3>Reviews</h3>
                                 <hr/>
-                                {books.bookRatingsData && books.bookRatingsData.map((item, index) => (
+                                {house.houseRatingsData && house.houseRatingsData.map((item, index) => (
                                     <div className="row" key={index}>
                                         <div className="col-md-2">
                                             <img src={item.userImage} width="100" height="40" alt=""/>
@@ -223,7 +227,7 @@ function BookDetailsComponents() {
                 </div>
                 <div className="row">
                     <div className="col-md-12 mt-5">
-                        <h1 className="card-title-dp">Related Books</h1>
+                        <h1 className="card-title-dp">Related House</h1>
                     </div>
                     <div className="row">
 
@@ -235,4 +239,4 @@ function BookDetailsComponents() {
         </React.Fragment>);
 }
 
-export default BookDetailsComponents;
+export default HouseDetailsComponents;

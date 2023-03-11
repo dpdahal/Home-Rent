@@ -13,7 +13,6 @@ import {getAuthUser} from "./store/reducers/authSlice";
 function App() {
     if (localStorage.getItem('user')) {
         {
-            console.log("test")
             let user = localStorage.getItem('user');
             user = JSON.parse(user);
             window.user = user;

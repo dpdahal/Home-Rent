@@ -1,20 +1,22 @@
 import React from "react";
 import {CKEditor} from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import api from "../../config/api";
+import axios from "axios";
 
 const API_URL = "http://127.0.0.1:8000/api/ckeditor";
 
 function MyEditor({handleChange, ...props}) {
     function uploadAdapter(loader) {
+        const body = new FormData();
         return {
             upload: () => {
+
                 return new Promise((resolve, reject) => {
-                    const body = new FormData();
                     loader.file.then((file) => {
-                        console.log(file);
+
                         body.append("image", file);
-                        api.post(`${API_URL}`, {body: body})
+                        console.log('filese',body);
+                        axios.post(`${API_URL}`, {body:body})
                             .then((res) => {
                                 console.log(res);
                                 resolve({

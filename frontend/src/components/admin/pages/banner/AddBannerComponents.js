@@ -16,7 +16,7 @@ const bannerSchema = yup.object().shape({
 });
 
 function AddBannerComponents(props) {
-    const [editor, setEditor] = useState(null);
+    const [editor, setEditor] = useState('');
     const dispatch = useDispatch();
     const {
         register,

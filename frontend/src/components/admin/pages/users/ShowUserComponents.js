@@ -68,9 +68,36 @@ function ShowUserComponents() {
                                                     <td>{user.gender}</td>
                                                     <td>{user.email}</td>
                                                     <td>
-                                                        {user.role === 'admin' ?
-                                                            <button className="btn btn-primary">Admin</button> :
-                                                            <button className="btn btn-warning">User</button>}
+
+                                                        {(() => {
+                                                            if (user.role === 'tenant') {
+                                                                return (
+                                                                    <div>
+                                                                        <button
+                                                                            className="btn btn-danger">{user.role}
+                                                                        </button>
+                                                                    </div>
+                                                                )
+                                                            } else if (user.role === 'owner') {
+                                                                return (
+                                                                    <div>
+                                                                        <button
+                                                                            className="btn btn-warning">{user.role}
+                                                                        </button>
+                                                                    </div>
+                                                                )
+                                                            }else{
+                                                                return (
+                                                                    <div>
+                                                                        <button
+                                                                            className="btn btn-primary">{user.role}
+                                                                        </button>
+                                                                    </div>
+                                                                )
+                                                            }
+
+
+                                                        })()}
 
                                                     </td>
                                                     <td>

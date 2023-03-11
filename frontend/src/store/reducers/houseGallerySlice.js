@@ -9,7 +9,7 @@ const initialState = {
 };
 
 export const addHouseImage = createAsyncThunk(
-    "house/addHouseImage",
+    "gallery/addHouseImage",
     async (object, {rejectWithValue}) => {
         try {
             const {data} = await api.post("/house/house-gallery", object);
@@ -21,7 +21,7 @@ export const addHouseImage = createAsyncThunk(
 );
 
 export const getHouseImages = createAsyncThunk(
-    "house/getHouseImages",
+    "gallery/getHouseImages",
     async (bookId) => {
         try {
             const {data} = await api.get(`/house/house-gallery/${bookId}`);
@@ -33,7 +33,7 @@ export const getHouseImages = createAsyncThunk(
 
 
 export const updateHouseImage = createAsyncThunk(
-    "house/updateHouseImage",
+    "gallery/updateHouseImage",
     async (object, {rejectWithValue}) => {
         try {
             const {data} = await api.put("/house-gallery", object);
@@ -45,7 +45,7 @@ export const updateHouseImage = createAsyncThunk(
 );
 
 export const deleteHouseImage = createAsyncThunk(
-    "house/deleteHouseImage",
+    "gallery/deleteHouseImage",
     async (id, {rejectWithValue}) => {
         try {
             await api.delete(`/house-gallery/${id}`);
@@ -73,7 +73,7 @@ const houseGallerySlice = createSlice({
                 ...state,
                 tasks: [...state.data, action.payload],
                 responseStatus: "success",
-                responseMessage: "images created successfully",
+                responseMessage: "gallery created successfully",
             };
         },
         [addHouseImage.rejected]: (state, action) => {

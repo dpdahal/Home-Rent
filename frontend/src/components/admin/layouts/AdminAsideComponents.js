@@ -66,7 +66,7 @@ function AdminAsideComponents() {
 
                 {
                     (() => {
-                        if (user.role == 'admin')
+                        if (user.role === 'admin')
                             return <React.Fragment>
                                 <li className="nav-item">
                                     <Link to="/show-users" className="nav-link collapsed">
@@ -80,12 +80,7 @@ function AdminAsideComponents() {
                                         Contact
                                     </Link>
                                 </li>
-                                <li className="nav-item">
-                                    <Link to="/show-faculty" className="nav-link collapsed">
-                                        <i className="bi bi-journal-text"></i>
-                                        Faculty
-                                    </Link>
-                                </li>
+
                                 <li className="nav-item">
                                     <Link className="nav-link collapsed" data-bs-target="#forms-nav-banner"
                                           data-bs-toggle="collapse"

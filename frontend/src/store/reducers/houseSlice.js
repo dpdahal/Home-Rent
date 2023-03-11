@@ -12,6 +12,8 @@ export const createHouse = createAsyncThunk(
     "houses/createHouse",
     async (object, {rejectWithValue}) => {
         try {
+            let token = localStorage.getItem("token");
+            api.defaults.headers.common["Authorization"] = `${token}`;
             const {data} = await api.post("/house", object);
             return data;
         } catch (error) {
@@ -33,6 +35,18 @@ export const getHouse = createAsyncThunk(
     });
 
 
+export const getLoginHouse = createAsyncThunk(
+    "houses/getLoginHouse", async () => {
+        try {
+            let token = localStorage.getItem("token");
+            api.defaults.headers.common["Authorization"] = `${token}`;
+            const {data} = await api.get("/house/login-house");
+            return data.house;
+        } catch (error) {
+            return error.response.data.message;
+        }
+    });
+
 export const updateHouse = createAsyncThunk(
     "houses/updateHouse",
     async (object, {rejectWithValue}) => {
@@ -53,31 +67,8 @@ export const deleteHouse = createAsyncThunk(
         try {
             let token = localStorage.getItem("token");
             api.defaults.headers.common["Authorization"] = `${token}`;
-            await api.delete(`/house/${houseId}`);
+            await api.delete(`/house/delete/${houseId}`);
             return houseId;
-        } catch (error) {
-            return rejectWithValue(error.response.data.message);
-        }
-    }
-);
-
-export const getHouseImages = createAsyncThunk(
-    "houses/getHouseImages",
-    async (galleryId) => {
-        try {
-            const {data} = await api.get(`/house/house-gallery/${galleryId}`);
-            return data;
-        } catch (error) {
-            return error.response.data.message;
-        }
-    });
-
-export const addHouseImage = createAsyncThunk(
-    "houses/addHouseImage",
-    async (object, {rejectWithValue}) => {
-        try {
-            const {data} = await api.post("/house/house-gallery", object);
-            return data;
         } catch (error) {
             return rejectWithValue(error.response.data.message);
         }
@@ -175,48 +166,28 @@ const houseSlice = createSlice({
                 responseMessage: action.payload,
             };
         },
-        [getHouseImages.pending]: (state, action) => {
+
+
+        [getLoginHouse.pending]: (state, action) => {
             return {
                 ...state,
                 responseStatus: "pending",
             };
         },
-        [getHouseImages.fulfilled]: (state, action) => {
+        [getLoginHouse.fulfilled]: (state, action) => {
             return {
                 ...state,
                 data: action.payload,
                 responseStatus: "success",
             };
         },
-        [getHouseImages.rejected]: (state, action) => {
+        [getLoginHouse.rejected]: (state, action) => {
             return {
                 ...state,
                 responseStatus: "rejected",
                 responseMessage: action.payload,
             };
         },
-        [addHouseImage.pending]: (state, action) => {
-            return {
-                ...state,
-                responseStatus: "pending",
-            };
-        },
-
-        [addHouseImage.fulfilled]: (state, action) => {
-            return {
-                ...state,
-                data: [...state.data, action.payload],
-                responseStatus: "success",
-                responseMessage: "houses created successfully",
-            };
-        },
-        [addHouseImage.rejected]: (state, action) => {
-            return {
-                ...state,
-                responseStatus: "rejected",
-                responseMessage: action.payload,
-            };
-        }
 
 
 

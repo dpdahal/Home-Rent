@@ -21,8 +21,8 @@ import ShowBlogComponents from "../admin/pages/blogs/ShowBlogComponents";
 import UpdateBlogComponents from "../admin/pages/blogs/UpdateBlogComponents";
 import ChatComponents from "../admin/pages/chat/ChatComponents";
 import ChangePasswordComponents from "../admin/pages/users/ChangePasswordComponents";
-import BooksDetailsComponents from "../pages/books/BooksDetailsComponents";
-import AllBookListComponents from "../pages/books/AllBookListComponents";
+import BooksDetailsComponents from "../pages/house/HouseDetailsComponents";
+import AllBookListComponents from "../pages/house/AllBookListComponents";
 import ContactListComponents from "../admin/pages/contact/ContactListComponents";
 import BlogListComponents from "../pages/blogs/BlogListComponents";
 import AboutUsComponents from "../pages/about/AboutUsComponents";
@@ -43,7 +43,7 @@ function RouterComponents() {
                 <Route path="/login" element={<LoginComponents/>}/>
                 <Route path="/register" element={<AddUserComponents/>}/>
                 <Route path="/contact-us" element={<ContactComponents/>}/>
-                <Route path="/book-details/:id" element={<BooksDetailsComponents/>}/>
+                <Route path="/house-details/:id" element={<BooksDetailsComponents/>}/>
                 <Route path="/books" element={<AllBookListComponents/>}/>
                 <Route path="/blog-list" element={<BlogListComponents/>}/>
                 <Route path="/blog-details/:id" element={<BlogDetailsComponents/>}/>

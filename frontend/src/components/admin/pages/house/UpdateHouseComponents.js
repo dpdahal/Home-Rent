@@ -3,18 +3,18 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Swal from "sweetalert2";
-import {useDispatch} from "react-redux";
 import AdminHeaderComponents from "../../layouts/AdminHeaderComponents";
 import AdminAsideComponents from "../../layouts/AdminAsideComponents";
 import AdminFooterComponents from "../../layouts/AdminFooterComponents";
 import api from "../../../../config/api";
 import {Link, useParams} from "react-router-dom";
 
-const BookSchema = yup.object().shape({
+const HouseSchema = yup.object().shape({
     title: yup.string().required(),
     price: yup.number().required(),
-    quantity: yup.number().required(),
-    faculty: yup.string().required(),
+    location: yup.string().required(),
+    rooms: yup.number().required(),
+    area: yup.number().required(),
     description: yup.string().required(),
 });
 
@@ -25,37 +25,26 @@ function UpdateHouseComponents() {
         setValue,
         formState: {errors}
     } = useForm({
-        resolver: yupResolver(BookSchema)
+        resolver: yupResolver(HouseSchema)
     });
-    const [faculties, setFaculties] = useState([]);
-    const [facultyId, setFacultyId] = useState();
-    const [facultyName, setFacultyName] = useState();
 
     let params = useParams();
 
-    const getBookById = () => {
-        api.get(`/books/${params.id}`).then(res => {
-            let book = res.data.book;
-            setValue('title', book.title);
-            setValue('price', book.price);
-            setValue('quantity', book.quantity);
-            setValue('faculty', book.faculty);
-            setValue('description', book.description);
+    const getHouseById = () => {
+        api.get(`/house/show/${params.id}`).then(res => {
+            let hData = res.data.house;
+            setValue('title', hData.title);
+            setValue('price', hData.price);
+            setValue('location', hData.location);
+            setValue('rooms', hData.rooms);
+            setValue('area', hData.area);
+            setValue('description', hData.description);
         });
 
-    }
-
-    const getFaculties = () => {
-        api.get('/faculty').then(res => {
-            console.log(res.data);
-            setFaculties(res.data.faculty);
-        });
     }
 
     useEffect(() => {
-        getBookById();
-        getFaculties();
-
+        getHouseById();
     }, []);
 
 
@@ -65,12 +54,15 @@ function UpdateHouseComponents() {
 
 
     const update = (data) => {
-        data = {...data, postedBy: localStorage.getItem("userId")};
-        api.put(`/books/${params.id}`, data).then(res => {
+        let user= localStorage.getItem("user");
+        user = JSON.parse(user);
+        let userId= user._id;
+        data = {...data, ownerId: userId};
+        api.put(`/house/update/${params.id}`, data).then(res => {
             if (res.data.success) {
                 Swal.fire({
                     icon: 'success',
-                    title: 'Book updated successfully',
+                    title: 'house updated successfully',
                     showConfirmButton: true,
                     timer: 1500
                 })
@@ -94,9 +86,9 @@ function UpdateHouseComponents() {
                             <div className="card">
                                 <div className="card-body">
                                     <h1 className="card-title-dp">
-                                        <i className="bi bi-pencil-square"></i> Update Book
-                                        <Link to="/show-book" className="btn btn-primary float-end">
-                                            <i className="bi bi-arrow-right-square-fill"></i> Show Books
+                                        <i className="bi bi-pencil-square"></i> Update House
+                                        <Link to="/show-house" className="btn btn-primary float-end">
+                                            <i className="bi bi-arrow-right-square-fill"></i> Show Houses
                                         </Link>
                                     </h1>
                                     <form action="#"
@@ -118,29 +110,30 @@ function UpdateHouseComponents() {
                                                    className="form-control"/>
                                         </div>
                                         <div className="form-group mb-2">
-                                            <label htmlFor="quantity">quantity:
-                                                {errors.quantity && <a style={pStyle}>{errors.quantity.message}</a>}
+                                            <label htmlFor="location">Location:
+                                                {errors.location && <a style={pStyle}>{errors.location.message}</a>}
                                             </label>
-                                            <input type="number" name="quantity"
-                                                   {...register("quantity")}
+                                            <input type="text" name="location"
+                                                   {...register("location")}
                                                    className="form-control"/>
                                         </div>
                                         <div className="form-group mb-2">
-                                            <label htmlFor="faculty">Faculty:
-                                                {errors.faculty && <a style={pStyle}>{errors.faculty.message}</a>}
+                                            <label htmlFor="rooms">Rooms:
+                                                {errors.rooms && <a style={pStyle}>{errors.rooms.message}</a>}
                                             </label>
-                                            <select name="faculty" {...register("faculty")} id=""
-                                                    className="form-control">
-                                                <option value={facultyId}>{facultyName}</option>
-                                                {faculties.map((faculty) => (
-                                                    <option key={faculty._id} value={faculty._id}>
-                                                        {faculty.name}
-                                                    </option>
-
-                                                ))}
-
-                                            </select>
+                                            <input type="number" name="rooms"
+                                                   {...register("rooms")}
+                                                   className="form-control"/>
                                         </div>
+                                        <div className="form-group mb-2">
+                                            <label htmlFor="area">Area:
+                                                {errors.area && <a style={pStyle}>{errors.area.message}</a>}
+                                            </label>
+                                            <input type="number" name="area"
+                                                   {...register("area")}
+                                                   className="form-control"/>
+                                        </div>
+
                                         <div className="form-group mb-3">
                                             <label htmlFor="description">Description:
                                                 {errors.description &&
@@ -152,7 +145,7 @@ function UpdateHouseComponents() {
                                         </div>
                                         <div className="form-group mb-3">
                                             <button className="btn btn-success">
-                                                <i className="bi bi-pencil-square"></i> Update Books
+                                                <i className="bi bi-pencil-square"></i> Update House
                                             </button>
                                         </div>
                                     </form>

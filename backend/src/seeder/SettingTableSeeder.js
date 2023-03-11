@@ -10,11 +10,11 @@ class SettingTableSeeder {
                 if (count === 0) {
                     let sObj = new Setting({
 
-                        "name": "NCIT NOTE SEWA",
-                        "email": "info@ncitnotesewa.com.np",
+                        "name": "Fast Rent Home",
+                        "email": "info@fastrenthome.com",
                         "phone": "01-5555555",
                         "address": "Kathmandu, Nepal",
-                        "logo": "ncslogo.svg"
+                        "logo": "fastrenthome.svg"
                     });
                     sObj.save().then((res) => {
                         console.log("Setting table seeded");

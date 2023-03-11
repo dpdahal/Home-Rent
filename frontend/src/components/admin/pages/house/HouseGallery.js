@@ -3,15 +3,16 @@ import AdminAsideComponents from "../../layouts/AdminAsideComponents";
 import AdminFooterComponents from "../../layouts/AdminFooterComponents";
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {addHouseImage, getHouseImages} from "../../../../store/reducers/houseSlice";
+import {getHouseImages} from "../../../../store/reducers/houseGallerySlice";
 import {useDispatch, useSelector} from "react-redux";
 import Swal from "sweetalert2";
+import api from "../../../../config/api";
 
 function HouseGallery() {
     const dispatch = useDispatch();
     const params = useParams();
     let galleryImage = useSelector((state) => state);
-    let houseImages = galleryImage.house.data.houseImages;
+    let houseImages = galleryImage.houseGallery.data.houseImages;
 
     const [images, setImages] = useState([]);
     const imageHandler = (e) => {
@@ -24,8 +25,8 @@ function HouseGallery() {
         Object.values(images).forEach(file => {
             sendData.append("images", file);
         });
-        dispatch(addHouseImage(sendData)).then((res) => {
-            if (res.payload.success) {
+        api.post('/house/house-gallery', sendData).then((response) => {
+            if (response.data.success) {
                 Swal.fire({
                     icon: 'success',
                     title: 'house images successfully inserted',
@@ -41,7 +42,10 @@ function HouseGallery() {
                     text: 'Something went wrong!',
                 })
             }
+        }).catch((error) => {
+            console.log(error);
         });
+
     }
 
     useEffect(() => {

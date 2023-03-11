@@ -1,20 +1,22 @@
-import React, {useEffect} from "react";
+import React, {useEffect,useSta} from "react";
 import AdminHeaderComponents from "../../layouts/AdminHeaderComponents";
 import AdminAsideComponents from "../../layouts/AdminAsideComponents";
 import AdminFooterComponents from "../../layouts/AdminFooterComponents";
 import {useDispatch, useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Swal from "sweetalert2";
-import {deleteHouse, getHouse} from "../../../../store/reducers/houseSlice";
+import {deleteHouse, getLoginHouse} from "../../../../store/reducers/houseSlice";
+import api from "../../../../config/api";
 
 function ShowHouseComponents() {
+
     const dispatch = useDispatch();
     let houseData = useSelector((state) => state)
     let houses = houseData.house.data;
     const navigate = useNavigate();
 
     useEffect(() => {
-        dispatch(getHouse())
+        dispatch(getLoginHouse())
     }, []);
     const handleDelete = (id) => {
         Swal.fire({
@@ -53,6 +55,9 @@ function ShowHouseComponents() {
                                 <div className="card-body">
                                     <h1 className="card-title-dp">
                                         <i className="bi bi-bag-plus-fill"></i> House List
+                                        <Link to="/add-house" className="btn btn-primary float-end">
+                                            <i className="bi bi-arrow-right-square-fill"></i> Add House
+                                        </Link>
 
                                     </h1>
                                     <table className="table">
@@ -86,8 +91,8 @@ function ShowHouseComponents() {
                                                 </td>
                                                 <td>
                                                     <button className="btn btn-primary"
-                                                            onClick={() => navigate(`/update-book/${house._id}`)}
-                                                            title="Update Book">
+                                                            onClick={() => navigate(`/update-house/${house._id}`)}
+                                                            title="Update House">
                                                         <i className="bi bi-pencil-square"></i>
                                                     </button>
                                                     <button title="Delete Book"

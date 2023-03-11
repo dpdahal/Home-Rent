@@ -1261,6 +1261,7 @@ h6 {
 
 .card-title-dp{
     font-size: 30px;
-    padding: 5px 5px 10px 5px;
-    border-bottom: 2px solid #c7c4c4;
+    padding: 5px 5px 20px 5px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #eeeded;
 }

@@ -3,14 +3,15 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Swal from "sweetalert2";
-import {useDispatch, useSelector} from "react-redux";
-import {createHouse} from "../../../../store/reducers/houseSlice";
+import {useDispatch} from "react-redux";
 import AdminHeaderComponents from "../../layouts/AdminHeaderComponents";
 import AdminAsideComponents from "../../layouts/AdminAsideComponents";
 import AdminFooterComponents from "../../layouts/AdminFooterComponents";
 import {Link} from "react-router-dom";
+import {createHouse} from "../../../../store/reducers/houseSlice";
 
-const BookSchema = yup.object().shape({
+
+const HouseSchema = yup.object().shape({
     title: yup.string().required(),
     price: yup.number().required(),
     location: yup.string().required(),
@@ -21,15 +22,13 @@ const BookSchema = yup.object().shape({
 
 function AddHouseComponent() {
     let dispatch = useDispatch();
-
-
-    const {
+  const {
         register,
         handleSubmit,
         reset,
         formState: {errors}
     } = useForm({
-        resolver: yupResolver(BookSchema)
+        resolver: yupResolver(HouseSchema)
     });
     let pStyle = {
         color: "#f60000",
@@ -62,7 +61,7 @@ function AddHouseComponent() {
                     title: 'houses added successfully',
                     showConfirmButton: true,
                     timer: 3000,
-                    footer: '<a href="/show-houses">Go to houses list</a>'
+                    footer: '<a href="/show-house">Go to houses list</a>'
                 })
                 reset();
             } else {
@@ -85,7 +84,7 @@ function AddHouseComponent() {
                             <div className="card">
                                 <div className="card-body">
                                     <h1 className="card-title-dp">
-                                        <i className="bi bi-bag-plus-fill"></i> Add House
+                                        <i className="bi bi-house-fill"></i> Add House
                                         <Link to="/show-house" className="btn btn-primary float-end">
                                             <i className="bi bi-arrow-right-square-fill"></i> Show House
                                         </Link>
@@ -93,7 +92,7 @@ function AddHouseComponent() {
                                     <form action="#" onSubmit={handleSubmit(addHouse)}>
                                         <div className="row">
                                             <div className="col-md-6">
-                                                <div className="form-group mb-1">
+                                                <div className="form-group mb-3">
                                                     <label htmlFor="title">Title:
                                                         {errors.title && <a style={pStyle}>{errors.title.message}</a>}
                                                     </label>
@@ -103,7 +102,7 @@ function AddHouseComponent() {
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
-                                                <div className="form-group mb-1">
+                                                <div className="form-group mb-3">
                                                     <label htmlFor="location">Location:
                                                         {errors.location &&
                                                             <a style={pStyle}>{errors.location.message}</a>}
@@ -114,7 +113,7 @@ function AddHouseComponent() {
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
-                                                <div className="form-group mb-1">
+                                                <div className="form-group mb-3">
                                                     <label htmlFor="area">Area:
                                                         {errors.area && <a style={pStyle}>{errors.area.message}</a>}
                                                     </label>
@@ -124,7 +123,7 @@ function AddHouseComponent() {
                                                 </div>
                                             </div>
                                             <div className="col-md-6">
-                                                <div className="form-group mb-1">
+                                                <div className="form-group mb-3">
                                                     <label htmlFor="rooms">Rooms:
                                                         {errors.rooms && <a style={pStyle}>{errors.rooms.message}</a>}
                                                     </label>
@@ -135,7 +134,7 @@ function AddHouseComponent() {
                                             </div>
                                         </div>
 
-                                        <div className="form-group mb-1">
+                                        <div className="form-group mb-3">
                                             <label htmlFor="price">Price:
                                                 {errors.price && <a style={pStyle}>{errors.price.message}</a>}
                                             </label>
@@ -144,7 +143,7 @@ function AddHouseComponent() {
                                                    className="form-control"/>
                                         </div>
 
-                                        <div className="form-group mb-1">
+                                        <div className="form-group mb-3">
                                             <label htmlFor="description">Description:
                                                 {errors.description &&
                                                     <a style={pStyle}>{errors.description.message}</a>}
@@ -153,7 +152,7 @@ function AddHouseComponent() {
                                                       {...register("description")}
                                                       className="form-control"></textarea>
                                         </div>
-                                        <div className="form-group mb-1">
+                                        <div className="form-group mb-3">
                                             <label htmlFor="images">Images:
 
                                             </label>
@@ -161,10 +160,9 @@ function AddHouseComponent() {
                                                    onChange={imageHandler}
                                                    className="form-control"/>
                                         </div>
-                                        <div className="form-group mb-1">
+                                        <div className="form-group mb-3">
                                             <button className="btn btn-success">
-                                                <i className="bi bi-bag-plus-fill"></i>
-                                                Add House
+                                                <i className="bi bi-bag-plus-fill"></i>  Add House
                                             </button>
                                         </div>
                                     </form>
