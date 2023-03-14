@@ -116,7 +116,9 @@ function AddBlogComponents() {
                                                 {errors.description &&
                                                     <a style={pStyle}>{errors.description.message}</a>}
                                             </label>
-                                            <textarea name="description"></textarea>
+                                            <textarea name="description"
+                                                      {...register("description")}
+                                                      id="editor" className="form-control"></textarea>
                                         </div>
                                         <div className="form-group mb-2">
                                             <label htmlFor="images">Images:

@@ -39,8 +39,11 @@ function UpdateUserComponents() {
         setProfile(e.target.files[0]);
     }
     const updateUserInfo = (data) => {
+        let user = localStorage.getItem('user');
+        user = JSON.parse(user);
+        let userId = user._id;
         let sendData = new FormData();
-        sendData.append("id", localStorage.getItem("userId"));
+        sendData.append("id", userId);
         sendData.append('name', data.name);
         sendData.append('email', data.email);
         sendData.append('password', data.password);
@@ -71,12 +74,14 @@ function UpdateUserComponents() {
     }, []);
 
     const getProfileData = () => {
-        api.get(`/users/${localStorage.getItem("userId")}`).then((res) => {
+        let user = localStorage.getItem('user');
+        user = JSON.parse(user);
+        let userId = user._id;
+        api.get(`/users/${userId}`).then((res) => {
             let user = res.data.users;
             setValue("name", user.name);
             setValue("email", user.email);
             setValue("gender", user.gender);
-            console.log(user.image)
             setProfileImage(user.image);
         });
     }

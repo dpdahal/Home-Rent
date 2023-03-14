@@ -23,7 +23,7 @@ export default class UserController {
                 res.status(200).json({users: users, success: true});
             }
         } else {
-           return  res.status(200).json({message: "Invalid token"});
+            return res.status(200).json({message: "Invalid token"});
         }
 
 

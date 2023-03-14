@@ -53,7 +53,7 @@ function LoginComponents() {
             <HeaderComponents/>
             <div className="container mt-5 mt-5 mb-5">
                 <div className="row  justify-content-center">
-                    <div className="col-md-4">
+                    <div className="col-md-4 mb-4">
                         <h1>Login</h1>
                     </div>
                 </div>

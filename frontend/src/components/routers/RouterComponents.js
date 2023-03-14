@@ -21,8 +21,8 @@ import ShowBlogComponents from "../admin/pages/blogs/ShowBlogComponents";
 import UpdateBlogComponents from "../admin/pages/blogs/UpdateBlogComponents";
 import ChatComponents from "../admin/pages/chat/ChatComponents";
 import ChangePasswordComponents from "../admin/pages/users/ChangePasswordComponents";
-import BooksDetailsComponents from "../pages/house/HouseDetailsComponents";
-import AllBookListComponents from "../pages/house/AllBookListComponents";
+import HouseDetailsComponents from "../pages/house/HouseDetailsComponents";
+import AllHouseList from "../pages/house/AllHouseListComponents";
 import ContactListComponents from "../admin/pages/contact/ContactListComponents";
 import BlogListComponents from "../pages/blogs/BlogListComponents";
 import AboutUsComponents from "../pages/about/AboutUsComponents";
@@ -32,6 +32,7 @@ import AddAboutComponents from "../admin/pages/about/AddAboutComponents";
 import ShowAboutComponents from "../admin/pages/about/ShowAboutComponents";
 import UpdateAboutComponents from "../admin/pages/about/UpdateAboutComponents";
 import HouseGallery from "../admin/pages/house/HouseGallery";
+import BookComponents from "../pages/book/BookComponents";
 
 function RouterComponents() {
     return (
@@ -43,8 +44,9 @@ function RouterComponents() {
                 <Route path="/login" element={<LoginComponents/>}/>
                 <Route path="/register" element={<AddUserComponents/>}/>
                 <Route path="/contact-us" element={<ContactComponents/>}/>
-                <Route path="/house-details/:id" element={<BooksDetailsComponents/>}/>
-                <Route path="/books" element={<AllBookListComponents/>}/>
+                <Route path="/house-details/:id" element={<HouseDetailsComponents/>}/>
+                <Route path="/house-list" element={<AllHouseList/>}/>
+                <Route path="/book-house/:houseId/:ownerId" element={<BookComponents/>}/>
                 <Route path="/blog-list" element={<BlogListComponents/>}/>
                 <Route path="/blog-details/:id" element={<BlogDetailsComponents/>}/>
 

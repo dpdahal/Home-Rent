@@ -3,10 +3,7 @@ import HeaderComponents from "../../layouts/HeaderComponents";
 import FooterComponents from "../../layouts/FooterComponents";
 import {Link, useNavigate} from "react-router-dom";
 import HomeBannerComponents from "../../layouts/HomeBannerComponents";
-
 import HomeBlogListComponents from "./HomeBlogListComponents";
-import {getHouse} from "../../../store/reducers/houseSlice";
-import {useDispatch, useSelector} from "react-redux";
 import api from "../../../config/api";
 
 function HomeComponents() {
@@ -20,7 +17,7 @@ function HomeComponents() {
 
 
     let orderBookHandle = (bookId, ownerId) => {
-        navigate(`/order-book/${bookId}/${ownerId}`);
+        navigate(`/book-house/${bookId}/${ownerId}`);
     }
 
 
@@ -37,7 +34,8 @@ function HomeComponents() {
                                 <button className="btn-wishlist btn-sm" type="button" data-bs-toggle="tooltip"
                                         data-bs-placement="left" title="Add to wishlist"><i className="ci-heart"/>
                                 </button>
-                                <Link to={`/book-details/${house._id}`} className="card-img-top d-block overflow-hidden">
+                                <Link to={`/house-details/${house._id}`}
+                                      className="card-img-top d-block overflow-hidden">
                                     <img src={house.image} height="300" alt="Product"/></Link>
                                 <div className="card-body py-2">
                                     <h3 className="product-title fs-sm">
@@ -60,7 +58,7 @@ function HomeComponents() {
                                     <button className="btn btn-primary btn-sm d-block w-100 mb-2"
                                             onClick={() => orderBookHandle(house._id, house.ownerId)}
                                             type="button">
-                                        <i className="ci-cart fs-sm me-1"/>Order Now
+                                        <i className="ci-cart fs-sm me-1"/>Book Now
                                     </button>
 
 
@@ -80,8 +78,8 @@ function HomeComponents() {
 
                 </div>
                 <div className="text-center pt-3">
-                    <Link to="/" className="btn btn-outline-accent">
-                        More Books<i className="ci-arrow-right ms-1"/>
+                    <Link to="/house-list" className="btn btn-outline-accent">
+                        More House<i className="ci-arrow-right ms-1"/>
                     </Link>
                 </div>
             </section>

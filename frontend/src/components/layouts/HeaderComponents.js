@@ -25,8 +25,8 @@ function HeaderComponents() {
 
     useEffect(() => {
         if (search !== '') {
-            api.get(`/books/search_books/${search}`).then((response) => {
-                setSearchBookData(response.data.books);
+            api.get(`/house/house-search/${search}`).then((response) => {
+                setSearchBookData(response.data.house);
             });
         }
 
@@ -121,7 +121,7 @@ function HeaderComponents() {
                         {searchBookData && searchBookData.map((book, index) => {
                             return (
                                 <li key={index}>
-                                    <Link to={`/book-details/${book._id}`} onClick={searchBookClose}>
+                                    <Link to={`/house-details/${book._id}`} onClick={searchBookClose}>
                                         <div className="dp-search-section-content">
                                             <h3>{book.title}</h3>
                                         </div>
@@ -145,7 +145,7 @@ function HeaderComponents() {
                             <Link to="/about-us" className="nav-row-list-link">About Us</Link>
                         </li>
                         <li className="nav-row-list">
-                            <Link to="/books" className="nav-row-list-link">House</Link>
+                            <Link to="/house-list" className="nav-row-list-link">House</Link>
                         </li>
                         <li className="nav-row-list">
                             <Link to="/blog-list" className="nav-row-list-link">Blog</Link>

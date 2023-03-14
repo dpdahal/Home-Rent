@@ -26,8 +26,8 @@ function HouseDetailsComponents() {
         const houseId = house._id;
         let user = localStorage.getItem("user");
         user = JSON.parse(user);
-        let userId = user._id;
-        if (userId) {
+        if (user) {
+            let userId = user._id;
             setIsReview(true);
             const data = {
                 houseId: houseId,
@@ -52,8 +52,9 @@ function HouseDetailsComponents() {
         const houseId = house._id;
         let user = localStorage.getItem("user");
         user = JSON.parse(user);
-        let userId = user._id;
-        if (userId) {
+
+        if (user) {
+            let userId = user._id;
             let data = {
                 houseId: houseId,
                 userId: userId,

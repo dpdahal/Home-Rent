@@ -166,7 +166,6 @@ class HouseController {
             return rating;
         });
         houseData.houseRatingsData = houseRating;
-        console.log(houseData)
 
         res.json({house: houseData});
 
@@ -334,6 +333,13 @@ class HouseController {
             await HouseRating.create({...req.body});
             res.status(200).json({success: "house review success"});
         }
+    }
+
+    async searchHouse(req, res) {
+        let search = req.params.criteria;
+        console.log(search);
+        let houseData = await House.find({title: {$regex: search, $options: "i"}});
+        res.status(200).json({house: houseData});
     }
 }
 

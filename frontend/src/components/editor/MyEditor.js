@@ -15,8 +15,8 @@ function MyEditor({handleChange, ...props}) {
                     loader.file.then((file) => {
 
                         body.append("image", file);
-                        console.log('filese',body);
-                        axios.post(`${API_URL}`, {body:body})
+                        console.log('filese', body);
+                        axios.post(`${API_URL}`, {body: body})
                             .then((res) => {
                                 console.log(res);
                                 resolve({

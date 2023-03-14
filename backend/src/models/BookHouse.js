@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const HouseOrdersSchema = new mongoose.Schema({
+const HouseBookSchema = new mongoose.Schema({
     houseId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "house",
@@ -15,6 +15,29 @@ const HouseOrdersSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     },
+    name: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    phone: {
+        type: String,
+        required: true
+    },
+    optional_phone: {
+        type: String,
+    },
+    address: {
+        type: String,
+        required: true
+    },
+    optional_address: {
+        type: String,
+    },
+
     quantity: {
         type: Number,
         required: true,
@@ -38,4 +61,4 @@ const HouseOrdersSchema = new mongoose.Schema({
     versionKey: false
 });
 
-export default mongoose.model("HouseOrdersSchema", HouseOrdersSchema);
+export default mongoose.model("HouseBookSchema", HouseBookSchema);
