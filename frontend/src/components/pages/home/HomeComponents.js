@@ -5,20 +5,15 @@ import {Link, useNavigate} from "react-router-dom";
 import HomeBannerComponents from "../../layouts/HomeBannerComponents";
 import HomeBlogListComponents from "./HomeBlogListComponents";
 import api from "../../../config/api";
+import BookNow from "../book/BookNow";
 
 function HomeComponents() {
     const [houseData, setHouseData] = useState([]);
-    const navigate = useNavigate();
     useEffect(() => {
         api.get(`/house/`).then((response) => {
             setHouseData(response.data.house);
         });
     }, []);
-
-
-    let orderBookHandle = (bookId, ownerId) => {
-        navigate(`/book-house/${bookId}/${ownerId}`);
-    }
 
 
     return (
@@ -39,7 +34,7 @@ function HomeComponents() {
                                     <img src={house.image} height="300" alt="Product"/></Link>
                                 <div className="card-body py-2">
                                     <h3 className="product-title fs-sm">
-                                        <Link to={`/book-details/${house._id}`}>{house.title}</Link></h3>
+                                        <Link to={`/house-details/${house._id}`}>{house.title}</Link></h3>
                                     <div className="d-flex justify-content-between">
                                         <div className="product-price"><span
                                             className="text-accent">Rs. {house.price}</span></div>
@@ -53,20 +48,11 @@ function HomeComponents() {
                                     </div>
                                 </div>
                                 <div className="card-body card-body-hidden">
-
-
-                                    <button className="btn btn-primary btn-sm d-block w-100 mb-2"
-                                            onClick={() => orderBookHandle(house._id, house.ownerId)}
-                                            type="button">
-                                        <i className="ci-cart fs-sm me-1"/>Book Now
-                                    </button>
-
-
+                                    <BookNow houseId={house._id} ownerId={house.ownerId}/>
                                     <div className="text-center">
                                         <Link to={`/house-details/${house._id}`} className="nav-link-style fs-ms">
                                             <i className="ci-eye align-middle me-1"/>
                                             Quick view</Link>
-
 
                                     </div>
                                 </div>

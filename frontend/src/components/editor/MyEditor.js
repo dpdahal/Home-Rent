@@ -8,33 +8,36 @@ const API_URL = "http://127.0.0.1:8000/api/ckeditor";
 function MyEditor({handleChange, ...props}) {
     function uploadAdapter(loader) {
         const body = new FormData();
-        return {
-            upload: () => {
 
-                return new Promise((resolve, reject) => {
-                    loader.file.then((file) => {
 
-                        body.append("image", file);
-                        console.log('filese', body);
-                        axios.post(`${API_URL}`, {body: body})
-                            .then((res) => {
-                                console.log(res);
-                                resolve({
-                                    default: res.data.filePath
-                                });
-                            })
-                            .then((res) => {
-                                resolve({
-                                    default: `${API_URL}/${res.filename}`
-                                });
-                            })
-                            .catch((err) => {
-                                reject(err);
-                            });
+        return new Promise((resolve, reject) => {
+            loader.file.then((file) => {
+                body.append("image", file);
+                axios.post(`${API_URL}`, {body: body}, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
+                    .then((res) => {
+                        console.log(res);
+                        resolve({
+                            default: res.data.filePath
+                        });
+                    })
+                    .then((res) => {
+                        console.log(res);
+                        resolve({
+
+                            default: `${API_URL}/${res.filename}`
+                        });
+                    })
+                    .catch((err) => {
+                        reject(err);
                     });
-                });
-            }
-        };
+            });
+        });
+
+
     }
 
     function uploadPlugin(editor) {

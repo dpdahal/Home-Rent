@@ -9,16 +9,8 @@ function HomeBannerComponents() {
         dispatch(getBanner());
     }, []);
     return (
-        <React.Fragment>
+        <div>
             <div id="carouselExampleDark" className="carousel carousel-dark slide" data-bs-ride="carousel">
-                <div className="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to={0} className="active"
-                            aria-current="true" aria-label="Slide 1"/>
-                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to={1}
-                            aria-label="Slide 2"/>
-                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to={2}
-                            aria-label="Slide 3"/>
-                </div>
                 <div className="carousel-inner">
                     {bannerData && bannerData.banner.data.map((banner, index) => (
                         <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
@@ -41,7 +33,7 @@ function HomeBannerComponents() {
                     <span className="visually-hidden">Next</span>
                 </button>
             </div>
-        </React.Fragment>
+        </div>
     )
 }
 

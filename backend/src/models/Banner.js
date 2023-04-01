@@ -16,7 +16,6 @@ let bannerSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        required: true
     }
 }, {
     versionKey: false

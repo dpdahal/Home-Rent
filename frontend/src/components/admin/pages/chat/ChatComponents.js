@@ -3,11 +3,8 @@ import socket from "./appContext";
 
 import AdminHeaderComponents from "../../layouts/AdminHeaderComponents";
 import AdminAsideComponents from "../../layouts/AdminAsideComponents";
-import AdminFooterComponents from "../../layouts/AdminFooterComponents";
 import "./style.css";
 import api from "../../../../config/api";
-import {useDispatch, useSelector} from "react-redux";
-import {getUsers} from "../../../../store/reducers/usersSlice";
 
 function ChatComponents() {
     const [findUser, setFindUser] = useState([]);
@@ -15,9 +12,12 @@ function ChatComponents() {
     const [message, setMessage] = useState([]);
     const [users, setUsers] = useState([]);
 
+    let getUser = localStorage.getItem('user');
+    let localUser = JSON.parse(getUser);
+
 
     useEffect(() => {
-        api.get("/users").then((res) => {
+        api.get("/users/user-list/show").then((res) => {
             setUsers(res.data.users);
         });
     }, []);
@@ -34,7 +34,7 @@ function ChatComponents() {
 
     const handleChatBox = async (id) => {
         setChatBox(true);
-        let senderId = localStorage.getItem('userId');
+        let senderId = localUser._id;
 
         await api.get(`/users/${id}`).then(res => {
             getMessageBySenderAndReceiver(senderId, id);
@@ -53,7 +53,7 @@ function ChatComponents() {
 
     const sendMessage = (e) => {
         let message = e.target.value;
-        let senderId = localStorage.getItem("userId");
+        let senderId = localUser._id;
         let receiverId = findUser._id;
 
         if (e.keyCode === 13) {
@@ -78,26 +78,21 @@ function ChatComponents() {
 
 
     socket.on('message', async (msg) => {
-        let senderId = localStorage.getItem("userId");
+        let senderId = localUser._id;
         let receiverId = findUser._id;
         setMessage([...message, msg]);
     });
 
     return (
-        <div>
+        <React.Fragment>
             <AdminHeaderComponents/>
             <AdminAsideComponents/>
             <main id="main" className="main">
                 <section className="section">
-                    <div className="card">
-                        <div className="card-body">
-                            <div className="row">
-                                <div className="col-md-12">
-                                    <div className="chat-title">
-                                        <h2><i className="bi bi-messenger"></i> Chat Dashboard</h2>
-                                    </div>
-                                </div>
-                                <div className="col-md-12 mt-5">
+                    <div className="row">
+                        <div className="col-lg-12">
+                            <div className="card">
+                                <div className="card-body">
                                     <div className="row">
                                         {chatBox ? (
                                             <div className="chat-main-box col-md-8">
@@ -109,9 +104,6 @@ function ChatComponents() {
                                                 <div className="row">
                                                     <div className="col-md-12">
                                                         <div className="chat-box-header">
-                                                            <p>
-                                                                {findUser.image}
-                                                            </p>
                                                             <img src={findUser.image} alt=""/>
 
                                                             <h1> {findUser.name ? findUser.name : "No Name"}</h1>
@@ -122,7 +114,7 @@ function ChatComponents() {
                                                         <div className="messageListBox">
                                                             {message && message.map((msg, index) => (
                                                                 <div key={index}>
-                                                                    {msg.sender === localStorage.getItem("userId") ? (
+                                                                    {msg.sender === localUser._id ? (
                                                                             <div
                                                                                 className="receivedMessageBox">
                                                                                 {msg.message}
@@ -158,24 +150,24 @@ function ChatComponents() {
 
                                         <div className="col-md-4 userBoxList">
                                             <div className="user-list-section">
-                                                <h3>Users</h3>
+                                                <h3>Users List</h3>
                                                 <input onChange={filterUser} placeholder="Filter user" type="text"/>
                                                 <ul className="user-list">
-                                                    {users.map((user) => (
-                                                        <div key={user._id}>
+                                                    {users.map((luser) => (
+                                                        <div key={luser._id}>
                                                             {
                                                                 (() => {
-                                                                    if (user._id !== localStorage.getItem("userId"))
+                                                                    if (luser._id !== localUser._id)
                                                                         return <li
-                                                                            onClick={() => handleChatBox(user._id)}>
+                                                                            onClick={() => handleChatBox(luser._id)}>
                                                                             <div className="user-list-item">
                                                                                 <div className="user-list-item-image">
-                                                                                    <img src={user.image} width="40"
+                                                                                    <img src={luser.image} width="40"
                                                                                          alt=""/>
                                                                                 </div>
                                                                                 <div className="user-list-item-name">
                                                                                     <h4>
-                                                                                        {user.name}
+                                                                                        {luser.name}
                                                                                     </h4>
                                                                                 </div>
                                                                             </div>
@@ -197,8 +189,10 @@ function ChatComponents() {
                     </div>
                 </section>
             </main>
-            <AdminFooterComponents/>
-        </div>
+
+        </React.Fragment>
+
+
     )
 
 

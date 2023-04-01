@@ -3,9 +3,7 @@ import HeaderComponents from "../../layouts/HeaderComponents";
 import FooterComponents from "../../layouts/FooterComponents";
 import {useNavigate, useParams} from "react-router-dom";
 import api from "../../../config/api";
-import {orderBook} from "../../../store/reducers/bookOrderSlice";
-import Swal from "sweetalert2";
-import {useDispatch} from "react-redux";
+import BookNow from "../book/BookNow";
 
 
 function HouseDetailsComponents() {
@@ -14,7 +12,6 @@ function HouseDetailsComponents() {
     const [review, setReview] = useState("");
     const [isReview, setIsReview] = useState(false);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const reviewValue = (event) => {
         const reValue = event.target.value;
@@ -84,34 +81,6 @@ function HouseDetailsComponents() {
         getHouseById();
     }, []);
 
-    const orderBookHandle = (bookId, ownerId) => {
-        let loginUserId = localStorage.getItem('userId');
-        if (loginUserId) {
-            let sendData = {
-                bookId: bookId,
-                ownerId: ownerId,
-                userId: loginUserId
-            }
-            dispatch(orderBook(sendData)).then((response) => {
-                if (response.payload.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Order was successfully',
-                        showConfirmButton: true,
-                        timer: 1500
-                    })
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Something went wrong!',
-                    })
-                }
-            });
-        } else {
-            navigate(`/login`);
-        }
-    }
 
 
     return (
@@ -147,26 +116,23 @@ function HouseDetailsComponents() {
                         <br/>
                         <p>{house.description}</p>
                         <br/>
-                        <button onClick={() => orderBookHandle(house._id, house.ownerId)}
-                                className="btn btn-danger">Order Now
-                        </button>
+                        <BookNow houseId={house._id} ownerId={house.ownerId}/>
 
                         <form action="" className="mt-5" onSubmit={addRatingAndReview}>
                             <div className="row">
                                 <div className="col-md-3">
                                     <h3>Rating</h3>
                                     <input type="radio" onChange={ratingValues} value="5" name="rating"/>
-                                    <input
-                                        type="range" name="demo" value="100"/>
+                                    <input type="range" name="demo" readOnly value="100"/>
                                     <br/>
                                     <input type="radio" onChange={ratingValues} value="4" name="rating"/> <input
-                                    type="range" name="demo" value="80"/> <br/>
+                                    type="range" name="demo" readOnly value="80"/> <br/>
                                     <input type="radio" onChange={ratingValues} value="3" name="rating"/> <input
-                                    type="range" name="demo" value="60"/> <br/>
+                                    type="range" name="demo" readOnly value="60"/> <br/>
                                     <input type="radio" onChange={ratingValues} value="2" name="rating"/> <input
-                                    type="range" name="demo" value="40"/> <br/>
+                                    type="range" name="demo" readOnly value="40"/> <br/>
                                     <input type="radio" onChange={ratingValues} value="1" name="rating"/> <input
-                                    type="range" name="demo" value="10"/> <br/>
+                                    type="range" name="demo" readOnly value="10"/> <br/>
                                 </div>
                                 {isReview ? (
                                     <div className="col-md-9">
@@ -204,13 +170,13 @@ function HouseDetailsComponents() {
                                             <div className="some-container">
                                                 {
                                                     (() => {
-                                                        if (item.rating == 5)
+                                                        if (item.rating === 5)
                                                             return <h4>*****</h4>
-                                                        if (item.rating == 4)
+                                                        if (item.rating === 4)
                                                             return <h4>****</h4>
-                                                        if (item.rating == 3)
+                                                        if (item.rating === 3)
                                                             return <h4>***</h4>
-                                                        if (item.rating == 2)
+                                                        if (item.rating === 2)
                                                             return <h4>**</h4>
                                                         else
                                                             return <span>*</span>

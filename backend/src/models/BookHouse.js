@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
-const HouseBookSchema = new mongoose.Schema({
+const BookSchema = new mongoose.Schema({
     houseId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "house",
+        ref: "House",
         required: true
     },
     userId: {
@@ -61,4 +61,4 @@ const HouseBookSchema = new mongoose.Schema({
     versionKey: false
 });
 
-export default mongoose.model("HouseBookSchema", HouseBookSchema);
+export default mongoose.model("BookHouse", BookSchema);

@@ -1,22 +1,25 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from 'react';
 import * as yup from "yup";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup/dist/yup";
 import Swal from "sweetalert2";
+import JoditEditor from 'jodit-react';
+
 import {useDispatch} from "react-redux";
 import AdminHeaderComponents from "../../layouts/AdminHeaderComponents";
 import AdminAsideComponents from "../../layouts/AdminAsideComponents";
 import AdminFooterComponents from "../../layouts/AdminFooterComponents";
 import {createBanner} from "../../../../store/reducers/bannerSlice";
-import MyEditor from "../../../editor/MyEditor";
+import {Link} from "react-router-dom";
 
 const bannerSchema = yup.object().shape({
     title: yup.string().required(),
     subtitle: yup.string().required(),
 });
 
-function AddBannerComponents(props) {
-    const [editor, setEditor] = useState('');
+function AddBannerComponents() {
+    const editor = useRef(null);
+    const [content, setContent] = useState('');
     const dispatch = useDispatch();
     const {
         register,
@@ -39,7 +42,7 @@ function AddBannerComponents(props) {
         let sendData = new FormData();
         sendData.append('title', data.title);
         sendData.append('subtitle', data.title);
-        sendData.append('description', editor);
+        sendData.append('description', content);
         Object.values(images).forEach(file => {
             sendData.append("images", file);
         });
@@ -73,9 +76,12 @@ function AddBannerComponents(props) {
                             <div className="card-body">
                                 <h1 className="card-title-dp">
                                     <i className="bi bi-bag-plus-fill"></i> Add Banner
+                                    <Link to="/show-banner" className="btn btn-primary float-end">
+                                        <i className="bi bi-arrow-right-square-fill"></i> Show Banner
+                                    </Link>
                                 </h1>
                                 <form action="" onSubmit={handleSubmit(addBanner)}>
-                                    <div className="form-group mb-2">
+                                    <div className="form-group mb-3">
                                         <label htmlFor="title">Title:
                                             {errors.title && <a style={pStyle}>{errors.title.message}</a>}
                                         </label>
@@ -83,7 +89,7 @@ function AddBannerComponents(props) {
                                                {...register("title")}
                                                className="form-control"/>
                                     </div>
-                                    <div className="form-group mb-2">
+                                    <div className="form-group mb-3">
                                         <label htmlFor="subtitle">Sub Title:
                                             {errors.subtitle && <a style={pStyle}>{errors.subtitle.message}</a>}
                                         </label>
@@ -92,16 +98,15 @@ function AddBannerComponents(props) {
                                                className="form-control"/>
                                     </div>
 
-                                    <div className="form-group mb-2">
+                                    <div className="form-group mb-3">
                                         <label htmlFor="description">Description: </label>
-                                        <MyEditor
-                                            handleChange={(data) => {
-                                                setEditor(data);
-                                            }}
-                                            data={editor}
-                                            {...props} />
+                                        <JoditEditor
+                                            ref={editor}
+                                            value={content}
+                                            tabIndex={1}
+                                            onChange={newContent => setContent(newContent)}/>
                                     </div>
-                                    <div className="form-group mb-2">
+                                    <div className="form-group mb-3">
                                         <label htmlFor="images">Images:
 
                                         </label>
@@ -109,8 +114,10 @@ function AddBannerComponents(props) {
                                                onChange={imageHandler}
                                                className="form-control"/>
                                     </div>
-                                    <div className="form-group mb-2">
-                                        <button className="btn btn-success">Add Banner</button>
+                                    <div className="form-group mb-3">
+                                        <button className="btn btn-success">
+                                            <i className="bi bi-bag-plus-fill"></i> Add Banner
+                                        </button>
                                     </div>
                                 </form>
 

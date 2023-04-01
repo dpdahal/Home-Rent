@@ -22,6 +22,8 @@ houseRoute.post("/house-gallery", upload.array('images', 100), houseInstance.add
 houseRoute.post("/house-rating", houseInstance.addHouseRating);
 houseRoute.post("/house-review", houseInstance.addHouseReview);
 houseRoute.get("/house-search/:criteria", houseInstance.searchHouse);
+houseRoute.post("/book-house", houseInstance.bookHouse);
+houseRoute.get("/booked-houses-list/:id", houseInstance.getBookOrderList);
 
 
 export default houseRoute;

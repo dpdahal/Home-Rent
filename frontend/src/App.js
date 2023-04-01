@@ -11,9 +11,9 @@ import {getAuthUser} from "./store/reducers/authSlice";
 
 
 function App() {
-    if (localStorage.getItem('user')) {
+    if (localStorage.getItem('user') ?? false) {
         {
-            let user = localStorage.getItem('user');
+            let user = localStorage.getItem('user') ?? false;
             user = JSON.parse(user);
             window.user = user;
         }
@@ -21,8 +21,10 @@ function App() {
 
     let dispatch = useDispatch();
     useEffect(() => {
-        if (localStorage.getItem('token')) {
-            dispatch(getAuthUser(window.user._id));
+        let userData = localStorage.getItem('user') ?? false;
+        if (userData) {
+            userData = JSON.parse(userData);
+            dispatch(getAuthUser(userData._id));
         }
         dispatch(getSetting())
 

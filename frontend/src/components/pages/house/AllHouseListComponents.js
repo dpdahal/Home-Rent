@@ -60,7 +60,7 @@ function AllHouseList() {
                                 <button className="btn-wishlist btn-sm" type="button" data-bs-toggle="tooltip"
                                         data-bs-placement="left" title="Add to wishlist"><i className="ci-heart"/>
                                 </button>
-                                <Link to={`/book-details/${house._id}`} className="card-img-top d-block overflow-hidden">
+                                <Link to={`/house-details/${house._id}`} className="card-img-top d-block overflow-hidden">
                                     <img src={house.image} height="300" alt="Product"/></Link>
                                 <div className="card-body py-2">
                                     <h3 className="product-title fs-sm">

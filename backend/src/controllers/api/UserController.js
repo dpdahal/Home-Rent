@@ -9,6 +9,11 @@ import Auth from "../../middleware/auth.js";
 
 export default class UserController {
 
+    async allUserData(req, res) {
+        let userData = await User.find({});
+        res.status(200).json({users: userData});
+    }
+
     async index(req, res) {
         let token = req.headers.authorization;
         let ojb = Auth.verifyToken(token);
@@ -30,19 +35,27 @@ export default class UserController {
     }
 
     async store(req, res) {
-        try {
-            let imageName = "";
-            if (req.file) {
-                imageName = req.file.filename;
+        let findEmail = await User.find({email: req.body.email}).countDocuments();
+        if (findEmail > 0) {
+            return res.status(200).json({message: "Email already exist"});
+        } else {
+            try {
+                let imageName = "";
+                if (req.file) {
+                    imageName = req.file.filename;
+                }
+                return await User.create({...req.body, image: imageName}).then((user) => {
+                    return res.status(200).json({success: "User created successfully"});
+                }).catch((err) => {
+                    return res.json(err);
+                });
+
+
+            } catch (e) {
+                return res.json(e);
             }
-            return await User.create({...req.body, image: imageName}).then((user) => {
-                return res.status(200).json({success: "User created successfully"});
-            }).catch((err) => {
-                return res.json(err);
-            });
-        } catch (e) {
-            return res.json(e);
         }
+
 
     }
 
@@ -58,12 +71,17 @@ export default class UserController {
             }
             imageName = req.file.filename;
         }
-        let updateData = {...req.body, image: imageName}
-        return await User.findByIdAndUpdate(id, updateData).then((user) => {
-            return res.status(200).json({success: "User updated successfully"});
-        }).catch((err) => {
-            return res.json(err);
-        });
+        let updateData = {
+            name: req.body.name,
+            gender: req.body.gender,
+            image: imageName,
+        }
+        try {
+            await User.findByIdAndUpdate(id, updateData);
+            return res.status(200).json({success: "User updated successfully"})
+        } catch (e) {
+            return res.json(e);
+        }
     }
 
 

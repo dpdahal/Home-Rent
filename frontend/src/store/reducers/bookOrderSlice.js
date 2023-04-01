@@ -24,7 +24,7 @@ export const getBookOrderListByLoginUser = createAsyncThunk(
     "book/getBookOrderListByLoginUser",
     async (userId, {rejectWithValue}) => {
         try {
-            const {data} = await api.get(`/books/book-order-by-login-user/${userId}`);
+            const {data} = await api.get(`/house/booked-houses-list/${userId}`);
             return data;
         } catch (error) {
             return rejectWithValue(error.response.data.message);

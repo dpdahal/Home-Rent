@@ -4,6 +4,7 @@ import Auth from "../../middleware/auth.js";
 import User from "../../models/User.js";
 import fs from "fs";
 import HouseRating from "../../models/HouseRatings.js";
+import BookHouse from "../../models/BookHouse.js";
 
 class HouseController {
     async index(req, res) {
@@ -222,7 +223,6 @@ class HouseController {
     }
 
     async addBookImage(req, res) {
-
         if (req.files) {
             req.files.map(async (file) => {
                 let houseId = req.body.houseId;
@@ -337,10 +337,82 @@ class HouseController {
 
     async searchHouse(req, res) {
         let search = req.params.criteria;
-        console.log(search);
         let houseData = await House.find({title: {$regex: search, $options: "i"}});
         res.status(200).json({house: houseData});
     }
+
+    async bookHouse(req, res) {
+        let houseId = req.body.houseId;
+        let userId = req.body.userId;
+        let totalHouse = await BookHouse.find({houseId: houseId, userId: userId}).countDocuments();
+        if (totalHouse > 0) {
+            await BookHouse.findOneAndUpdate({houseId: houseId}, {$inc: {quantity: 1}});
+            res.status(200).json({success: "House order success"});
+        } else {
+            await BookHouse.create({...req.body});
+            res.status(200).json({success: "House booked successfully"});
+        }
+    }
+
+    async getBookOrderList(req, res) {
+        let bookOrders = await BookHouse.aggregate([
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "user"
+                }
+            },
+            {
+
+                $lookup: {
+                    from: "houses",
+                    localField: "houseId",
+                    foreignField: "_id",
+                    as: "house"
+                }
+            }
+
+        ]);
+        bookOrders = bookOrders.map((bookOrder) => {
+            bookOrder.book = bookOrder.house[0].title;
+            return bookOrder;
+        });
+        bookOrders = bookOrders.map((bookOrder) => {
+            bookOrder.user = bookOrder.user[0].name;
+            return bookOrder;
+        });
+        let userId = req.params.id;
+        let userData = await User.findById(userId);
+        let role = userData.role;
+        if (role === "owner") {
+            let userBooks = await House.find({postedBy: userId});
+
+            if (userBooks.length > 0) {
+                bookOrders = bookOrders.filter((order) => {
+                    return order.ownerId === userId;
+                });
+                res.status(200).json({books: bookOrders});
+            } else {
+                bookOrders = bookOrders.filter((order) => {
+                    return order.userId === userId;
+                });
+                res.status(200).json({books: bookOrders});
+            }
+
+        } else if (role === 'tenant') {
+            console.log("tenant");
+            bookOrders = bookOrders.filter((order) => {
+                return order.userId.toString() === userId;
+            });
+            res.status(200).json({books: bookOrders});
+        } else {
+
+            res.status(200).json({books: bookOrders});
+        }
+    }
+
 }
 
 export default HouseController;

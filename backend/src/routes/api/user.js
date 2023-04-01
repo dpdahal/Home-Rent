@@ -15,6 +15,7 @@ userRoute.post("/", filesUploads.single('image'), userInstance.store);
 userRoute.put("/", filesUploads.single('image'), userInstance.update);
 userRoute.get("/:id", userInstance.show);
 userRoute.delete("/:id", userInstance.delete);
+userRoute.get('/user-list/show', userInstance.allUserData);
 userRoute.post('/change-password', userInstance.changePassword);
 userRoute.get('/user-search/:id', userInstance.searchUser);
 

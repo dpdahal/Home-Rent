@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import * as yup from "yup";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup/dist/yup";
@@ -10,7 +10,7 @@ import AdminFooterComponents from "../../layouts/AdminFooterComponents";
 import {useParams} from "react-router-dom";
 import api from "../../../../config/api";
 import {updateBanner} from "../../../../store/reducers/bannerSlice";
-import MyEditor from "../../../editor/MyEditor";
+import JoditEditor from "jodit-react";
 
 const bannerSchema = yup.object().shape({
     title: yup.string().required(),
@@ -18,10 +18,11 @@ const bannerSchema = yup.object().shape({
     description: yup.string().required(),
 });
 
-function UpdateBannerComponents(props) {
+function UpdateBannerComponents() {
+    const editor = useRef(null);
+    const [content, setContent] = useState('');
     const dispatch = useDispatch();
     const params = useParams();
-    const [editor, setEditor] = useState(null);
 
 
     const {
@@ -76,8 +77,8 @@ function UpdateBannerComponents(props) {
             let banner = response.data.banners;
             setValue("title", banner.title);
             setValue("subtitle", banner.subtitle);
-            setValue("description", banner.description);
-            setEditor(banner.description);
+            // setValue("description", banner.description);
+            setContent(banner.description);
         });
     }, [params.id]);
     return (<div>
@@ -112,12 +113,11 @@ function UpdateBannerComponents(props) {
 
                                     <div className="form-group mb-2">
                                         <label htmlFor="description">Description:</label>
-                                        <MyEditor
-                                            handleChange={(data) => {
-                                                setEditor(data);
-                                            }}
-                                            data={editor}
-                                            {...props} />
+                                        <JoditEditor
+                                            ref={editor}
+                                            value={content}
+                                            tabIndex={1}
+                                            onChange={newContent => setContent(newContent)}/>
                                     </div>
                                     <div className="form-group mb-2">
                                         <label htmlFor="images">Images:

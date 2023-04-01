@@ -33,6 +33,8 @@ import ShowAboutComponents from "../admin/pages/about/ShowAboutComponents";
 import UpdateAboutComponents from "../admin/pages/about/UpdateAboutComponents";
 import HouseGallery from "../admin/pages/house/HouseGallery";
 import BookComponents from "../pages/book/BookComponents";
+import RoleMiddleware from "../middleware/RoleMiddleware";
+import AdminMiddleware from "../middleware/AdminMiddleware";
 
 function RouterComponents() {
     return (
@@ -53,35 +55,34 @@ function RouterComponents() {
 
                 <Route element={<AuthMiddleware/>}>
                     <Route path="/dashboard" element={<AdminDashboardComponents/>}/>
-                    <Route path="/add-house" element={<AddHouseComponent/>}/>
-                    <Route path="/show-house" element={<ShowHouseComponents/>}/>
-                    <Route path="/update-house/:id" element={<UpdateHouseComponents/>}/>
-                    <Route path="/house-gallery/:id" element={<HouseGallery/>}/>
 
+                    <Route element={<RoleMiddleware/>}>
+                        <Route path="/add-house" element={<AddHouseComponent/>}/>
+                        <Route path="/show-house" element={<ShowHouseComponents/>}/>
+                        <Route path="/update-house/:id" element={<UpdateHouseComponents/>}/>
+                        <Route path="/house-gallery/:id" element={<HouseGallery/>}/>
 
-                    <Route path="/add-about" element={<AddAboutComponents/>}/>
-                    <Route path="/show-about" element={<ShowAboutComponents/>}/>
-                    <Route path="/update-about/:id" element={<UpdateAboutComponents/>}/>
-
-                    <Route path="/update-profile" element={<UpdateUserComponents/>}/>
-                    <Route path="/change-password" element={<ChangePasswordComponents/>}/>
-                    <Route path="/add-banner" element={<AddBannerComponents/>}/>
-                    <Route path="/show-banner" element={<ShowBannerComponents/>}/>
-                    <Route path="/show-users" element={<ShowUserComponents/>}/>
-                    <Route path="/update-banner/:id" element={<UpdateBannerComponents/>}/>
+                    </Route>
+                    <Route element={<AdminMiddleware/>}>
+                        <Route path="/add-about" element={<AddAboutComponents/>}/>
+                        <Route path="/show-about" element={<ShowAboutComponents/>}/>
+                        <Route path="/update-about/:id" element={<UpdateAboutComponents/>}/>
+                        <Route path="/add-banner" element={<AddBannerComponents/>}/>
+                        <Route path="/show-banner" element={<ShowBannerComponents/>}/>
+                        <Route path="/show-users" element={<ShowUserComponents/>}/>
+                        <Route path="/update-banner/:id" element={<UpdateBannerComponents/>}/>
+                        <Route path="/add-blog" element={<AddBlogComponents/>}/>
+                        <Route path="/show-blog" element={<ShowBlogComponents/>}/>
+                        <Route path="/update-blog/:id" element={<UpdateBlogComponents/>}/>
+                        <Route path="/contact-list" element={<ContactListComponents/>}/>
+                        <Route path="/setting" element={<SettingComponents/>}/>
+                    </Route>
 
 
                     <Route path="/order-list" element={<OrderListComponents/>}/>
-
-                    <Route path="/add-blog" element={<AddBlogComponents/>}/>
-                    <Route path="/show-blog" element={<ShowBlogComponents/>}/>
-                    <Route path="/update-blog/:id" element={<UpdateBlogComponents/>}/>
+                    <Route path="/update-profile" element={<UpdateUserComponents/>}/>
+                    <Route path="/change-password" element={<ChangePasswordComponents/>}/>
                     <Route path="/chat" element={<ChatComponents/>}/>
-                    <Route path="/contact-list" element={<ContactListComponents/>}/>
-
-
-                    <Route path="/setting" element={<SettingComponents/>}/>
-
                 </Route>
 
                 <Route path="*" element={<PageNotFound/>}/>

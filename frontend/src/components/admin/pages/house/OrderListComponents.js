@@ -17,7 +17,7 @@ function OrderListComponents() {
             orderId: id,
             status: status
         }
-        api.post("/books/update-order-status", sendData).then((res) => {
+        api.post("/house/update-order-status", sendData).then((res) => {
             dispatch(getBookOrderListByLoginUser(userId));
         }).catch((err) => {
             console.log(err);
@@ -30,6 +30,7 @@ function OrderListComponents() {
         dispatch(getBookOrderListByLoginUser(userId));
 
     }, []);
+
 
     return (
         <div>
@@ -67,7 +68,7 @@ function OrderListComponents() {
                                                     <td>{order.createdAt}</td>
                                                     <td>{order.status}</td>
                                                     <td>
-                                                        {order.userId === localStorage.getItem('userId') ? (
+                                                        {order.userId === userId ? (
                                                             <React.Fragment>
                                                                 <button
                                                                     type="cancel"

@@ -22,6 +22,8 @@ const RegisterSchema = yup.object().shape({
 });
 
 function UpdateUserComponents() {
+    let user = localStorage.getItem('user');
+    user = JSON.parse(user);
     const dispatch = useDispatch();
 
     const {
@@ -35,7 +37,9 @@ function UpdateUserComponents() {
 
 
     const customPasswordChange = (data) => {
-        data.id = localStorage.getItem("userId");
+        console.log(user);
+
+        data.id = user._id;
         dispatch(changePassword(data)).then((res) => {
             if (res.payload.success) {
                 Swal.fire({

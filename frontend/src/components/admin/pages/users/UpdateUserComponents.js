@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Link, Navigate} from "react-router-dom";
 
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -16,7 +16,6 @@ import api from "../../../../config/api";
 
 const RegisterSchema = yup.object().shape({
     name: yup.string().required(),
-    email: yup.string().required().email(),
     gender: yup.string().required(),
 });
 
@@ -45,8 +44,6 @@ function UpdateUserComponents() {
         let sendData = new FormData();
         sendData.append("id", userId);
         sendData.append('name', data.name);
-        sendData.append('email', data.email);
-        sendData.append('password', data.password);
         sendData.append('gender', data.gender);
         sendData.append("image", profile);
         dispatch(updateUser(sendData)).then((res) => {
@@ -121,7 +118,7 @@ function UpdateUserComponents() {
                                                     <label htmlFor="email">Email:
                                                         {errors.email && <a style={pStyle}>{errors.email.message}</a>}
                                                     </label>
-                                                    <input type="email" className="form-control"
+                                                    <input type="email" disabled className="form-control"
                                                            {...register("email")}
                                                            name="email"/>
 
