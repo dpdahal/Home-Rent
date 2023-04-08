@@ -40,8 +40,6 @@ class BannerController {
     async update(req, res) {
         let id = req.body.id;
         let title = req.body.title;
-        let subtitle = req.body.subtitle;
-        let description = req.body.description;
         let findData = await Banner.findById(id);
         let imageName = "";
         if (req.files) {
@@ -56,8 +54,6 @@ class BannerController {
                     fs.unlinkSync(filePath);
                     return await Banner.findByIdAndUpdate(id, {
                         title,
-                        subtitle,
-                        description,
                         image: imageName
                     }).then((banner) => {
                         return res.status(200).json({success: "Banner updated successfully"});
@@ -67,8 +63,6 @@ class BannerController {
                 } else {
                     return await Banner.findByIdAndUpdate(id, {
                         title,
-                        subtitle,
-                        description,
                         image: findData.image
                     }).then((banner) => {
                         return res.status(200).json({success: "Banner updated successfully"});
@@ -79,8 +73,6 @@ class BannerController {
             } else {
                 return await Banner.findByIdAndUpdate(id, {
                     title,
-                    subtitle,
-                    description,
                     image: findData.image
                 }).then((banner) => {
                     return res.status(200).json({success: "Banner updated successfully"});
@@ -91,8 +83,6 @@ class BannerController {
         } else {
             return await Banner.findByIdAndUpdate(id, {
                 title,
-                subtitle,
-                description,
                 image: findData.image
             }).then((banner) => {
                 return res.status(200).json({success: "Banner updated successfully"});

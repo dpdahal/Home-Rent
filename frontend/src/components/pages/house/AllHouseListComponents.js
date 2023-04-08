@@ -6,6 +6,8 @@ import api from "../../../config/api";
 import {orderBook} from "../../../store/reducers/bookOrderSlice";
 import Swal from "sweetalert2";
 import {useDispatch} from "react-redux";
+import BookNow from "../book/BookNow";
+
 
 function AllHouseList() {
     const params = useParams();
@@ -79,11 +81,7 @@ function AllHouseList() {
                                 </div>
                                 <div className="card-body card-body-hidden">
 
-                                    <button className="btn btn-primary btn-sm d-block w-100 mb-2"
-                                            onClick={() => orderHouseHandle(house._id, house.ownerId)}
-                                            type="button">
-                                        <i className="ci-cart fs-sm me-1"/>Order Now
-                                    </button>
+                                    <BookNow houseId={house._id} ownerId={house.ownerId}/>
                                     <div className="text-center">
                                         <Link to={`/house-details/${house._id}`} className="nav-link-style fs-ms">
                                             <i className="ci-eye align-middle me-1"/>

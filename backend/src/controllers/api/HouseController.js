@@ -5,6 +5,7 @@ import User from "../../models/User.js";
 import fs from "fs";
 import HouseRating from "../../models/HouseRatings.js";
 import BookHouse from "../../models/BookHouse.js";
+import Mail from "../../config/mail.js";
 
 class HouseController {
     async index(req, res) {
@@ -346,71 +347,82 @@ class HouseController {
         let userId = req.body.userId;
         let totalHouse = await BookHouse.find({houseId: houseId, userId: userId}).countDocuments();
         if (totalHouse > 0) {
-            await BookHouse.findOneAndUpdate({houseId: houseId}, {$inc: {quantity: 1}});
-            res.status(200).json({success: "House order success"});
+            res.status(200).json({success: "House already booked"});
         } else {
-            await BookHouse.create({...req.body});
-            res.status(200).json({success: "House booked successfully"});
+            BookHouse.create({...req.body}).then((data) => {
+                res.status(200).json({bookingInfo: data});
+            }).catch((err) => {
+                res.status(400).json({error: "Something went wrong"});
+            });
         }
     }
 
-    async getBookOrderList(req, res) {
-        let bookOrders = await BookHouse.aggregate([
-            {
-                $lookup: {
-                    from: "users",
-                    localField: "userId",
-                    foreignField: "_id",
-                    as: "user"
-                }
-            },
-            {
-
-                $lookup: {
-                    from: "houses",
-                    localField: "houseId",
-                    foreignField: "_id",
-                    as: "house"
-                }
-            }
-
-        ]);
-        bookOrders = bookOrders.map((bookOrder) => {
-            bookOrder.book = bookOrder.house[0].title;
-            return bookOrder;
+    async getBooking(req, res) {
+        let id = req.params.id;
+        console.log(id)
+        BookHouse.findById(id).populate("houseId").populate("userId").then((book) => {
+            return res.status(200).json({bookingData: book});
         });
-        bookOrders = bookOrders.map((bookOrder) => {
-            bookOrder.user = bookOrder.user[0].name;
-            return bookOrder;
-        });
-        let userId = req.params.id;
-        let userData = await User.findById(userId);
-        let role = userData.role;
-        if (role === "owner") {
-            let userBooks = await House.find({postedBy: userId});
+    }
 
-            if (userBooks.length > 0) {
-                bookOrders = bookOrders.filter((order) => {
-                    return order.ownerId === userId;
-                });
-                res.status(200).json({books: bookOrders});
-            } else {
-                bookOrders = bookOrders.filter((order) => {
-                    return order.userId === userId;
-                });
-                res.status(200).json({books: bookOrders});
-            }
+    async bookingConfirm(req, res) {
 
-        } else if (role === 'tenant') {
-            console.log("tenant");
-            bookOrders = bookOrders.filter((order) => {
-                return order.userId.toString() === userId;
+        let type = req.body.type;
+        let bId = req.body.bookingId;
+        if (type === 'confirm') {
+            BookHouse.findByIdAndUpdate(bId, {paymentStatus: 'paid'}).then((book) => {
+                return res.status(200).json({success: "Booking confirmed successfully"});
+            }).catch((err) => {
+                return res.json(err);
             });
-            res.status(200).json({books: bookOrders});
-        } else {
 
-            res.status(200).json({books: bookOrders});
+        } else if (type === 'approved') {
+            let approvedData = await BookHouse.findByIdAndUpdate(bId, {status: 'approved'});
+            let id = approvedData._id;
+            BookHouse.findById(id).populate("houseId").populate("userId").then((book) => {
+                let roomType = book.houseId.title;
+                let email = book.userId.email;
+                let body = `Room Type: ${roomType} <br>  
+                            Total Price: ${book.houseId.price} <br> 
+                            Payment Status: ${book.paymentStatus}`;
+                let mailObj = new Mail();
+                mailObj.sendMail(process.env.EMAIL, email, "Booking Approved", body);
+                return res.status(200).json({success: "Booking approved successfully"});
+
+            });
+
+
+        } else if (type === 'reject') {
+            BookHouse.findByIdAndUpdate(bId, {status: 'reject'}).then((book) => {
+                return res.status(200).json({success: "Booking reject successfully"});
+            }).catch((err) => {
+                return res.json(err);
+            });
+
+        } else {
+            BookHouse.findByIdAndDelete(bId).then((book) => {
+                return res.status(200).json({success: "Booking canceled successfully"});
+            });
         }
+    }
+
+    async showOrderByLogin(req, res) {
+        let token = req.headers.authorization;
+        let ojb = Auth.verifyToken(token);
+        let loginUser = await User.findById(ojb.id);
+        if (loginUser.role === 'admin') {
+            let bookingData = await BookHouse.find({}).populate("houseId").populate("userId");
+            return res.status(200).json({bookingData: bookingData});
+        } else if (loginUser.role === 'owner') {
+            let bookingData = await BookHouse.find({ownerId: loginUser._id}).populate("houseId").populate("userId");
+            return res.status(200).json({bookingData: bookingData});
+        } else {
+            let bookingData = await BookHouse.find({userId: loginUser._id})
+                .populate("houseId")
+                .populate("userId");
+            return res.status(200).json({bookingData: bookingData});
+        }
+
     }
 
 }

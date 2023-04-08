@@ -58,8 +58,6 @@ function ShowBannerComponents() {
                                         <tr>
                                             <th>ID</th>
                                             <th>Title</th>
-                                            <th>Sub Title</th>
-                                            <th>Description</th>
                                             <th>Images</th>
                                             <th>Action</th>
                                         </tr>
@@ -70,8 +68,6 @@ function ShowBannerComponents() {
                                                 <tr key={index}>
                                                     <td>{++index}</td>
                                                     <td>{banner.title}</td>
-                                                    <td>{banner.subtitle}</td>
-                                                    <td>{banner.description}</td>
                                                     <td>
                                                         <img src={banner.image} width="40" alt=""/>
                                                     </td>

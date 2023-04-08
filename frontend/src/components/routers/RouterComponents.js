@@ -32,9 +32,9 @@ import AddAboutComponents from "../admin/pages/about/AddAboutComponents";
 import ShowAboutComponents from "../admin/pages/about/ShowAboutComponents";
 import UpdateAboutComponents from "../admin/pages/about/UpdateAboutComponents";
 import HouseGallery from "../admin/pages/house/HouseGallery";
-import BookComponents from "../pages/book/BookComponents";
 import RoleMiddleware from "../middleware/RoleMiddleware";
 import AdminMiddleware from "../middleware/AdminMiddleware";
+import BookConfirmComponents from "../pages/book/BookConfirmComponents";
 
 function RouterComponents() {
     return (
@@ -48,7 +48,7 @@ function RouterComponents() {
                 <Route path="/contact-us" element={<ContactComponents/>}/>
                 <Route path="/house-details/:id" element={<HouseDetailsComponents/>}/>
                 <Route path="/house-list" element={<AllHouseList/>}/>
-                <Route path="/book-house/:houseId/:ownerId" element={<BookComponents/>}/>
+                <Route path="/booking-confirm/:bookId" element={<BookConfirmComponents/>}/>
                 <Route path="/blog-list" element={<BlogListComponents/>}/>
                 <Route path="/blog-details/:id" element={<BlogDetailsComponents/>}/>
 
@@ -69,8 +69,8 @@ function RouterComponents() {
                         <Route path="/update-about/:id" element={<UpdateAboutComponents/>}/>
                         <Route path="/add-banner" element={<AddBannerComponents/>}/>
                         <Route path="/show-banner" element={<ShowBannerComponents/>}/>
-                        <Route path="/show-users" element={<ShowUserComponents/>}/>
                         <Route path="/update-banner/:id" element={<UpdateBannerComponents/>}/>
+                        <Route path="/show-users" element={<ShowUserComponents/>}/>
                         <Route path="/add-blog" element={<AddBlogComponents/>}/>
                         <Route path="/show-blog" element={<ShowBlogComponents/>}/>
                         <Route path="/update-blog/:id" element={<UpdateBlogComponents/>}/>

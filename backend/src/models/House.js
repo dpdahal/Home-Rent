@@ -48,4 +48,4 @@ const HouseSchema = new mongoose.Schema({
 });
 
 
-export default mongoose.model("house", HouseSchema);
+export default mongoose.model("House", HouseSchema);

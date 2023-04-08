@@ -4,7 +4,6 @@ const houseRoute = express.Router();
 
 import HouseController from "../../controllers/api/HouseController.js";
 import Uploads from "../../middleware/uploads.js";
-import house from "../../models/House.js";
 
 let houseInstance = new HouseController();
 
@@ -23,7 +22,9 @@ houseRoute.post("/house-rating", houseInstance.addHouseRating);
 houseRoute.post("/house-review", houseInstance.addHouseReview);
 houseRoute.get("/house-search/:criteria", houseInstance.searchHouse);
 houseRoute.post("/book-house", houseInstance.bookHouse);
-houseRoute.get("/booked-houses-list/:id", houseInstance.getBookOrderList);
+houseRoute.post("/booking-confirm", houseInstance.bookingConfirm);
+houseRoute.get("/get-by-booking-id/:id", houseInstance.getBooking);
+houseRoute.get("/show-order-by-login/", houseInstance.showOrderByLogin);
 
 
 export default houseRoute;

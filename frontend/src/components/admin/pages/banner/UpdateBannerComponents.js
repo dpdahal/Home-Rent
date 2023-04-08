@@ -10,17 +10,12 @@ import AdminFooterComponents from "../../layouts/AdminFooterComponents";
 import {useParams} from "react-router-dom";
 import api from "../../../../config/api";
 import {updateBanner} from "../../../../store/reducers/bannerSlice";
-import JoditEditor from "jodit-react";
 
 const bannerSchema = yup.object().shape({
     title: yup.string().required(),
-    subtitle: yup.string().required(),
-    description: yup.string().required(),
 });
 
 function UpdateBannerComponents() {
-    const editor = useRef(null);
-    const [content, setContent] = useState('');
     const dispatch = useDispatch();
     const params = useParams();
 
@@ -47,8 +42,6 @@ function UpdateBannerComponents() {
         let sendData = new FormData();
         sendData.append('id', params.id);
         sendData.append('title', data.title);
-        sendData.append('subtitle', data.title);
-        sendData.append('description', data.description);
         Object.values(images).forEach(file => {
             sendData.append("images", file);
         });
@@ -76,9 +69,6 @@ function UpdateBannerComponents() {
         api.get(`/banner/${params.id}`).then((response) => {
             let banner = response.data.banners;
             setValue("title", banner.title);
-            setValue("subtitle", banner.subtitle);
-            // setValue("description", banner.description);
-            setContent(banner.description);
         });
     }, [params.id]);
     return (<div>
@@ -102,23 +92,8 @@ function UpdateBannerComponents() {
                                                {...register("title")}
                                                className="form-control"/>
                                     </div>
-                                    <div className="form-group mb-2">
-                                        <label htmlFor="subtitle">Sub Title:
-                                            {errors.subtitle && <a style={pStyle}>{errors.subtitle.message}</a>}
-                                        </label>
-                                        <input type="text" name="subtitle"
-                                               {...register("subtitle")}
-                                               className="form-control"/>
-                                    </div>
 
-                                    <div className="form-group mb-2">
-                                        <label htmlFor="description">Description:</label>
-                                        <JoditEditor
-                                            ref={editor}
-                                            value={content}
-                                            tabIndex={1}
-                                            onChange={newContent => setContent(newContent)}/>
-                                    </div>
+
                                     <div className="form-group mb-2">
                                         <label htmlFor="images">Images:
 

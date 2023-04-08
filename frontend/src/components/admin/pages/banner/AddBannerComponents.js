@@ -3,7 +3,6 @@ import * as yup from "yup";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup/dist/yup";
 import Swal from "sweetalert2";
-import JoditEditor from 'jodit-react';
 
 import {useDispatch} from "react-redux";
 import AdminHeaderComponents from "../../layouts/AdminHeaderComponents";
@@ -14,12 +13,9 @@ import {Link} from "react-router-dom";
 
 const bannerSchema = yup.object().shape({
     title: yup.string().required(),
-    subtitle: yup.string().required(),
 });
 
 function AddBannerComponents() {
-    const editor = useRef(null);
-    const [content, setContent] = useState('');
     const dispatch = useDispatch();
     const {
         register,
@@ -41,8 +37,6 @@ function AddBannerComponents() {
     const addBanner = (data) => {
         let sendData = new FormData();
         sendData.append('title', data.title);
-        sendData.append('subtitle', data.title);
-        sendData.append('description', content);
         Object.values(images).forEach(file => {
             sendData.append("images", file);
         });
@@ -89,23 +83,7 @@ function AddBannerComponents() {
                                                {...register("title")}
                                                className="form-control"/>
                                     </div>
-                                    <div className="form-group mb-3">
-                                        <label htmlFor="subtitle">Sub Title:
-                                            {errors.subtitle && <a style={pStyle}>{errors.subtitle.message}</a>}
-                                        </label>
-                                        <input type="text" name="subtitle"
-                                               {...register("subtitle")}
-                                               className="form-control"/>
-                                    </div>
 
-                                    <div className="form-group mb-3">
-                                        <label htmlFor="description">Description: </label>
-                                        <JoditEditor
-                                            ref={editor}
-                                            value={content}
-                                            tabIndex={1}
-                                            onChange={newContent => setContent(newContent)}/>
-                                    </div>
                                     <div className="form-group mb-3">
                                         <label htmlFor="images">Images:
 
